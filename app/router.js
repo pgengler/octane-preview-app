@@ -6,6 +6,9 @@ const Router = EmberRouter.extend({
   rootURL: config.rootURL
 });
 
-Router.map(function() {});
+Router.map(function() {
+  this.route('sorted-array');
+  this.route('unsorted-array');
+});
 
 export default Router;

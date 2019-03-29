@@ -1,7 +1,7 @@
-This is a simple reproduction of an error I came across with a combination of a computed property, the array `.sortBy` method, and ember-power-select.
+This is a simple reproduction of an error I came across with a combination of a ember-power-select and a getter that accesses an array from `this.args` and calls `sort` on an array (even a completely different array).
 
-To run the app, run `yarn install`, then `ember s`, then go to http://localhost:4200
+There is no dependence on ember-data; the index route model hook returns an array of hashes which are passed into the `CategoryPicker` component. That component has a getter (`sortedCategories`) that accesses `this.args.categories` but doesn't do anything with it, then creates, sorts, and returns a completely new array. This is passed into {{ember-power-select}} and causes a "Maximum call stack size exceeded" error.
 
-The index page has two links, "With array .sortBy" and  "Without array .sortBy". The first link ("With array .sortBy") produces the error ("Uncaught RangeError: Maximum call stack size exceeded") while the other work to show the expected behavior.
+To run the app, run `yarn install`, then `ember s`, then go to http://localhost:4200. You will see the error in the console.
 
-The difference between these two routes is that in the failing case, the computed property calls `.sortBy` on the `this.args.categories` array while the other case just returns `this.args.categories` without calling `.sortBy`.
+If you comment out line 8 of app/components/category-picker.js (where `this.args.categories` is read but not used) then the error will not occur.
